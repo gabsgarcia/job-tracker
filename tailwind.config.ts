@@ -55,10 +55,15 @@ export default {
       keyframes: {
         "grow-x": { from: { transform: "scaleX(0)" }, to: { transform: "scaleX(1)" } },
         "grow-y": { from: { transform: "scaleY(0)" }, to: { transform: "scaleY(1)" } },
+        float: {
+          "0%, 100%": { transform: "translateY(0) rotate(-2deg)" },
+          "50%": { transform: "translateY(-6px) rotate(-2deg)" },
+        },
       },
       animation: {
         "grow-x": "grow-x 700ms cubic-bezier(0.2, 0, 0, 1) both",
         "grow-y": "grow-y 700ms cubic-bezier(0.2, 0, 0, 1) both",
+        float: "float 4s ease-in-out infinite",
       },
       borderRadius: {
         lg: "var(--radius)",

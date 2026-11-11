@@ -130,6 +130,7 @@ export function fromAshby(board: AshbyBoard, id: string, org: string, url: strin
 
 function decodeEntities(text: string): string {
   return text
+    .replace(/&nbsp;/g, " ")
     .replace(/&quot;/g, '"')
     .replace(/&#39;|&#x27;|&apos;/g, "'")
     .replace(/&lt;/g, "<")
@@ -193,4 +194,28 @@ export function extractJobPostingFromHtml(html: string, url: string): JobDraft |
     }
   }
   return null;
+}
+
+// ── Helpers for the AI fallback ─────────────────────────────────────────────
+
+/** A single link → "link"; anything else with content → "text" (a pasted job description). */
+export function classifyQuickAddInput(input: string): "link" | "text" | "empty" {
+  const value = input.trim();
+  if (!value) return "empty";
+  return /^https?:\/\/\S+$/i.test(value) ? "link" : "text";
+}
+
+/** Readable text of a web page, to send to the AI instead of raw HTML (much smaller). */
+export function htmlToText(html: string): string {
+  return decodeEntities(
+    html
+      .replace(/<(script|style|noscript|svg|template)[^>]*>[\s\S]*?<\/\1>/gi, "")
+      .replace(/<!--[\s\S]*?-->/g, "")
+      .replace(/<(br|\/p|\/div|\/li|\/h[1-6]|\/tr|\/section|\/article|\/header|\/footer)\b[^>]*>/gi, "\n")
+      .replace(/<[^>]+>/g, " "),
+  )
+    .split("\n")
+    .map((line) => line.replace(/\s+/g, " ").trim())
+    .filter(Boolean)
+    .join("\n");
 }

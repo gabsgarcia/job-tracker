@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
+  classifyQuickAddInput,
   extractJobPostingFromHtml,
+  htmlToText,
   fromAshby,
   fromGreenhouse,
   fromLever,
@@ -193,5 +195,29 @@ describe("extractJobPostingFromHtml", () => {
     expect(
       extractJobPostingFromHtml(`<script type="application/ld+json">{broken</script>`, "u"),
     ).toBeNull();
+  });
+});
+
+describe("classifyQuickAddInput", () => {
+  it("sees a single link as a link", () => {
+    expect(classifyQuickAddInput("  https://jobs.lever.co/x/1 ")).toBe("link");
+  });
+
+  it("sees anything else as job description text", () => {
+    expect(classifyQuickAddInput("Nubank is hiring a Product Manager in São Paulo")).toBe("text");
+    // A description that contains a link is still text
+    expect(classifyQuickAddInput("Apply at https://nubank.com.br/careers - PM role")).toBe("text");
+  });
+
+  it("returns empty for blank input", () => {
+    expect(classifyQuickAddInput("   \n ")).toBe("empty");
+  });
+});
+
+describe("htmlToText", () => {
+  it("drops scripts, styles and tags and keeps readable text", () => {
+    const html = `<html><head><style>p{color:red}</style><script>var x=1</script></head>
+      <body><h1>Product Manager</h1><p>Join&nbsp;us at <b>Nubank</b> &amp; grow.</p></body></html>`;
+    expect(htmlToText(html)).toBe("Product Manager\nJoin us at Nubank & grow.");
   });
 });

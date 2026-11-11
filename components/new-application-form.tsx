@@ -1,19 +1,20 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Link2, Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 import { ApplicationFields } from "@/components/application-fields";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { createApplication } from "@/app/(app)/applications/actions";
 import { lookupJob } from "@/app/(app)/applications/quick-add-actions";
 import type { JobDraft } from "@/lib/job-links";
 
-// "New application" card: paste a job link to pre-fill the form (Quick add),
-// review it, then save with the normal form. Nothing is saved automatically.
+// "New application" card: paste a job link or a job description to pre-fill the
+// form (Quick add), review it, then save with the normal form. Nothing is saved automatically.
 export function NewApplicationForm() {
   const [link, setLink] = useState("");
   const [draft, setDraft] = useState<JobDraft | null>(null);
+  // Bumped on every new draft so the fields remount with the new default values.
+  const [version, setVersion] = useState(0);
   const [error, setError] = useState<string>();
   const [pending, startTransition] = useTransition();
 
@@ -26,6 +27,7 @@ export function NewApplicationForm() {
         setError(result.error);
       } else {
         setDraft(result.draft);
+        setVersion((v) => v + 1);
         setLink("");
       }
     });
@@ -34,24 +36,35 @@ export function NewApplicationForm() {
   return (
     <div className="flex flex-col gap-4">
       <form onSubmit={handleLookup} className="flex flex-col gap-2">
-        <label htmlFor="quick-add" className="text-sm font-medium">
-          Quick add from a job link
+        <label htmlFor="quick-add" className="flex items-center gap-1.5 text-sm font-medium">
+          <Sparkles className="size-4 text-primary" />
+          Quick add: paste a job link or the job description
         </label>
-        <div className="flex gap-2">
-          <div className="relative flex-1">
-            <Link2 className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              id="quick-add"
-              type="url"
-              value={link}
-              onChange={(e) => setLink(e.target.value)}
-              placeholder="https://jobs.lever.co/… · Greenhouse · Ashby · Gupy"
-              className="pl-9"
-              required
-            />
-          </div>
+        <textarea
+          id="quick-add"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          onKeyDown={(e) => {
+            // Enter submits (handy for links); Shift+Enter adds a new line.
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              e.currentTarget.form?.requestSubmit();
+            }
+          }}
+          placeholder={"https://… (Greenhouse, Lever, Ashby, Gupy, career pages, …)\nor paste the full job description, e.g. copied from LinkedIn"}
+          rows={link.includes("\n") ? 5 : 2}
+          className="rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+          required
+        />
+        <div>
           <Button type="submit" variant="secondary" disabled={pending}>
-            {pending ? <Loader2 className="size-4 animate-spin" /> : "Fill form"}
+            {pending ? (
+              <>
+                <Loader2 className="size-4 animate-spin" /> Reading…
+              </>
+            ) : (
+              "Fill form"
+            )}
           </Button>
         </div>
         {error && (
@@ -61,7 +74,7 @@ export function NewApplicationForm() {
         )}
         {draft && (
           <p role="status" className="text-sm text-primary animate-in fade-in-0">
-            Filled from the link. Review and click “Add application”.
+            Form filled. Review it and click “Add application”.
           </p>
         )}
       </form>
@@ -76,20 +89,21 @@ export function NewApplicationForm() {
         action={async (formData) => {
           // Clear the draft so the form comes back empty after saving.
           setDraft(null);
+          setVersion((v) => v + 1);
           await createApplication(formData);
         }}
         className="flex flex-col gap-4"
       >
         {/* A new key remounts the fields so their default values take the draft. */}
         <ApplicationFields
-          key={draft?.url ?? "empty"}
+          key={version}
           app={
             draft
               ? {
                   company: draft.company,
                   position: draft.position,
                   status: "saved",
-                  job_url: draft.url,
+                  job_url: draft.url || null,
                   notes: draft.location ? `Location: ${draft.location}` : null,
                 }
               : undefined

@@ -1,0 +1,8 @@
+company,position,status,application_date,notes
+Nubank,Product Manager,applied,2026-08-18,Duplicate of a row already imported from sample-applications.csv
+,Product Designer,applied,2026-10-20,No company
+Itaú,Product Manager,offer,2026-10-21,"Status ""offer"" is not one of the app's statuses"
+Ambev,Data PM,applied,15/10/2026,Brazilian date format
+Magalu,Product Manager,applied,2026-02-30,Day that does not exist
+le wagon ,Teaching Assistant,interviewing,2026-11-09,Valid row
+Le Wagon,Teaching Assistant,interviewing,2026-11-09,Duplicate inside the same file (case and spaces ignored)

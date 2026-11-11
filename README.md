@@ -9,7 +9,7 @@ A small multi-user web app to keep track of job applications and the tasks for e
 - **Statuses:** `applied`, `interviewing`, `offered`, `rejected`, `withdrawn`.
 - **Tasks:** add tasks to an application (title, optional due date), mark them as done, delete them. The **Tasks** page lists all your tasks.
 - **Stats:** total applications, active applications, interview rate, open/overdue tasks, a bar chart by status and applications per week (last 12 weeks). Friendly empty state for new users.
-- **CSV import:** import many applications at once from a CSV file (see `sample-applications.csv`).
+- **CSV import with preview:** pick a CSV file, see which rows will be imported and which will be skipped (and why), then confirm. Rows without company or position, with an unknown status, with an invalid date, or duplicated (same company + position + date, ignoring case and spaces) are skipped. Example files: `sample-applications.csv` (10 valid rows) and `test-to-break.csv` (rows that must be rejected).
 - **Privacy:** Row Level Security in the database. Each user can only read and change their own rows.
 
 ## Tech stack
@@ -17,6 +17,7 @@ A small multi-user web app to keep track of job applications and the tasks for e
 - [Next.js](https://nextjs.org) (App Router, Server Actions) + TypeScript + Tailwind CSS
 - [Supabase](https://supabase.com) (Postgres database + Auth)
 - [Papa Parse](https://www.papaparse.com/) for reading CSV files
+- [Vitest](https://vitest.dev/) for unit tests
 
 ## Run it locally
 
@@ -36,7 +37,11 @@ You need Node.js (LTS) and a free Supabase account.
    ```
    `.env.local` is in `.gitignore` and must never be committed.
 4. **Create the tables:** open Supabase → *SQL Editor*, paste the content of `supabase/migrations/001_initial_schema.sql` and click **Run**. You should see "Success. No rows returned". Run each migration file once, in order.
-5. **Start the app**
+5. **Run the tests** (CSV import logic and stats, no database needed)
+   ```bash
+   npm run test
+   ```
+6. **Start the app**
    ```bash
    npm run dev
    ```
@@ -60,7 +65,8 @@ app/(app)/applications   list, create, detail/edit, server actions, CSV import a
 app/(app)/tasks          all tasks of the logged-in user
 app/(app)/stats          KPIs and charts (lib/stats.ts does the math)
 app/auth                 auth pages from the Supabase starter
-components/              navbar, forms, task list, CSV import
+components/              navbar, forms, task list, CSV import (preview + confirm)
+lib/csv-import.ts        parseCSVRow, validateRow, isDuplicate (tested in lib/csv-import.test.ts)
 lib/types.ts             statuses and types (must match the database)
 supabase/migrations/     SQL to run in the Supabase SQL Editor
 ```

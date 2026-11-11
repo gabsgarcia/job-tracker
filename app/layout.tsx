@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { paletteScript } from "@/lib/palettes";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -26,6 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Applies the saved color scheme before the first paint. */}
+        <script dangerouslySetInnerHTML={{ __html: paletteScript }} />
+      </head>
       <body className={`${geistSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"

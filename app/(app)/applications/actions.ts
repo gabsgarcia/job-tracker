@@ -58,11 +58,22 @@ export async function updateApplication(id: string, formData: FormData) {
   const parsed = readApplicationForm(formData);
   if ("error" in parsed) back(path, "error", parsed.error!);
 
+  // Read the old status first, so we know if this edit just turned it into an offer.
+  const { data: before } = await supabase
+    .from("applications")
+    .select("status")
+    .eq("id", id)
+    .maybeSingle();
+
   const { error } = await supabase.from("applications").update(parsed.values).eq("id", id);
   if (error) back(path, "error", `Could not update: ${error.message}`);
 
   revalidatePath("/applications");
   revalidatePath(path);
+  revalidatePath("/stats");
+  if (parsed.values.status === "offered" && before?.status !== "offered") {
+    redirect(`${path}?celebrate=1&message=${encodeURIComponent("Offer received! 🎉")}`);
+  }
   back(path, "message", "Application updated.");
 }
 

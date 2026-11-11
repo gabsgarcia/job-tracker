@@ -52,6 +52,14 @@ export default {
           "5": "hsl(var(--chart-5))",
         },
       },
+      keyframes: {
+        "grow-x": { from: { transform: "scaleX(0)" }, to: { transform: "scaleX(1)" } },
+        "grow-y": { from: { transform: "scaleY(0)" }, to: { transform: "scaleY(1)" } },
+      },
+      animation: {
+        "grow-x": "grow-x 700ms cubic-bezier(0.2, 0, 0, 1) both",
+        "grow-y": "grow-y 700ms cubic-bezier(0.2, 0, 0, 1) both",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

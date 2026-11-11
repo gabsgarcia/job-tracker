@@ -7,6 +7,7 @@ import { ApplicationFields } from "@/components/application-fields";
 import { CsvImport } from "@/components/csv-import";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
+import { enterClass, staggerStyle } from "@/lib/stagger";
 import type { Application } from "@/lib/types";
 import { createApplication } from "./actions";
 
@@ -73,11 +74,11 @@ export default async function ApplicationsPage({
           <ApplicationsBoard applications={applications} />
         ) : (
           <ul className="divide-y rounded-lg border">
-            {applications.map((app) => (
-              <li key={app.id}>
+            {applications.map((app, i) => (
+              <li key={app.id} className={enterClass} style={staggerStyle(i)}>
                 <Link
                   href={`/applications/${app.id}`}
-                  className="flex items-center justify-between gap-4 p-3 hover:bg-accent"
+                  className="flex items-center justify-between gap-4 p-3 transition-colors hover:bg-accent"
                 >
                   <div>
                     <div className="font-medium">{app.company}</div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ApplicationFields } from "@/components/application-fields";
+import { CelebrateOnLoad } from "@/components/celebrate-on-load";
 import { Flash } from "@/components/flash";
 import { StatusBadge } from "@/components/status-badge";
 import { TaskList } from "@/components/task-list";
@@ -16,10 +17,10 @@ export default async function ApplicationDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ message?: string; error?: string }>;
+  searchParams: Promise<{ message?: string; error?: string; celebrate?: string }>;
 }) {
   const { id } = await params;
-  const { message, error } = await searchParams;
+  const { message, error, celebrate } = await searchParams;
   const supabase = await createClient();
 
   // With RLS, another user's application simply "does not exist" here.
@@ -52,6 +53,7 @@ export default async function ApplicationDetailPage({
         </div>
       </div>
       <Flash message={message} error={error} />
+      <CelebrateOnLoad active={celebrate === "1"} />
 
       <section className="rounded-lg border p-4 flex flex-col gap-4">
         <h2 className="font-semibold">Edit application</h2>

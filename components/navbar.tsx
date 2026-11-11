@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { AuthButton } from "@/components/auth-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
+import { PalettePicker } from "@/components/palette-picker";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/lib/utils";
 
 const links = [
@@ -15,7 +17,7 @@ export function Navbar() {
     <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
       <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
         <div className="flex gap-6 items-center">
-          <Link href="/" className="font-semibold">
+          <Link href="/" className="font-semibold text-primary">
             💼 Job Tracker
           </Link>
           {links.map((link) => (
@@ -28,13 +30,19 @@ export function Navbar() {
             </Link>
           ))}
         </div>
-        {!hasEnvVars ? (
-          <EnvVarWarning />
-        ) : (
-          <Suspense>
-            <AuthButton />
-          </Suspense>
-        )}
+        <div className="flex items-center gap-1">
+          <PalettePicker />
+          <ThemeSwitcher />
+          <div className="ml-3">
+            {!hasEnvVars ? (
+              <EnvVarWarning />
+            ) : (
+              <Suspense>
+                <AuthButton />
+              </Suspense>
+            )}
+          </div>
+        </div>
       </div>
     </nav>
   );

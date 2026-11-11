@@ -19,6 +19,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
 import { Flash } from "@/components/flash";
 import { StatusBadge } from "@/components/status-badge";
+import { celebrate } from "@/lib/celebrate";
 import { STATUSES, type Application, type Status } from "@/lib/types";
 import { updateApplicationStatus } from "@/app/(app)/applications/actions";
 
@@ -61,6 +62,7 @@ export function ApplicationsBoard({ applications }: { applications: Application[
       moveOptimistic({ id, status });
       const result = await updateApplicationStatus(id, status);
       if (result.error) setError(result.error);
+      else if (status === "offered") celebrate();
     });
   }
 

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { deleteTask, toggleTask } from "@/app/(app)/applications/actions";
+import { enterClass, staggerStyle } from "@/lib/stagger";
 import type { Task } from "@/lib/types";
 
 // One list used on the application detail page and on /tasks.
@@ -17,8 +18,12 @@ export function TaskList({
   }
   return (
     <ul className="divide-y rounded-lg border">
-      {tasks.map((task) => (
-        <li key={task.id} className="flex items-center justify-between gap-4 p-3">
+      {tasks.map((task, i) => (
+        <li
+          key={task.id}
+          className={`flex items-center justify-between gap-4 p-3 ${enterClass}`}
+          style={staggerStyle(i)}
+        >
           <div className={task.done ? "line-through text-muted-foreground" : ""}>
             <div>{task.title}</div>
             <div className="text-xs text-muted-foreground">

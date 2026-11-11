@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { Navbar } from "@/components/navbar";
-import { ThemeSwitcher } from "@/components/theme-switcher";
 
 // Layout for every logged-in page: navbar on top, content in the middle.
 // The proxy (proxy.ts) already sends logged-out visitors to /auth/login.
@@ -14,9 +13,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           {children}
         </Suspense>
       </div>
-      <footer className="w-full flex items-center justify-center border-t text-xs gap-8 py-8">
-        <ThemeSwitcher />
-      </footer>
     </main>
   );
 }

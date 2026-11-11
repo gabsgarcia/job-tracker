@@ -1,11 +1,22 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { computeStats, todayInSaoPaulo } from "@/lib/stats";
+import { enterClass, staggerStyle } from "@/lib/stagger";
 import type { Application, Task } from "@/lib/types";
 
-function Kpi({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function Kpi({
+  label,
+  value,
+  hint,
+  index,
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+  index: number;
+}) {
   return (
-    <div className="rounded-lg border p-4">
+    <div className={`rounded-lg border bg-card p-4 ${enterClass}`} style={staggerStyle(index, 80)}>
       <div className="text-sm text-muted-foreground">{label}</div>
       <div className="text-3xl font-bold">{value}</div>
       {hint && <div className="text-xs text-muted-foreground mt-1">{hint}</div>}
@@ -53,14 +64,16 @@ export default async function StatsPage() {
       <h1 className="text-2xl font-bold">Stats</h1>
 
       <section className="grid gap-4 grid-cols-2 md:grid-cols-4">
-        <Kpi label="Total applications" value={String(s.total)} />
-        <Kpi label="Active" value={String(s.active)} hint="applied + interviewing" />
+        <Kpi index={0} label="Total applications" value={String(s.total)} />
+        <Kpi index={1} label="Active" value={String(s.active)} hint="applied + interviewing" />
         <Kpi
+          index={2}
           label="Interview rate"
           value={s.interviewRate === null ? "–" : `${Math.round(s.interviewRate * 100)}%`}
           hint="(interviewing + offered) ÷ total"
         />
         <Kpi
+          index={3}
           label="Open tasks"
           value={String(s.openTasks)}
           hint={s.overdueTasks > 0 ? `${s.overdueTasks} overdue` : "none overdue"}
@@ -69,13 +82,13 @@ export default async function StatsPage() {
 
       <section className="rounded-lg border p-4 flex flex-col gap-3">
         <h2 className="font-semibold">Applications by status</h2>
-        {s.byStatus.map(({ status, count }) => (
+        {s.byStatus.map(({ status, count }, i) => (
           <div key={status} className="flex items-center gap-3 text-sm">
             <span className="w-24 shrink-0">{status}</span>
             <div className="flex-1 h-4 rounded bg-muted">
               <div
-                className="h-4 rounded bg-primary"
-                style={{ width: `${(count / maxStatus) * 100}%` }}
+                className="h-4 origin-left animate-grow-x rounded bg-primary"
+                style={{ width: `${(count / maxStatus) * 100}%`, animationDelay: `${i * 80}ms` }}
               />
             </div>
             <span className="w-6 text-right tabular-nums">{count}</span>
@@ -86,12 +99,12 @@ export default async function StatsPage() {
       <section className="rounded-lg border p-4 flex flex-col gap-3">
         <h2 className="font-semibold">Applications per week (last 12 weeks)</h2>
         <div className="flex items-end gap-1 h-40">
-          {s.perWeek.map((w) => (
+          {s.perWeek.map((w, i) => (
             <div key={w.weekStart} className="flex-1 flex flex-col items-center justify-end h-full gap-1">
               <span className="text-xs tabular-nums">{w.count || ""}</span>
               <div
-                className="w-full rounded-t bg-primary"
-                style={{ height: `${(w.count / maxWeek) * 100}%` }}
+                className="w-full origin-bottom animate-grow-y rounded-t bg-primary"
+                style={{ height: `${(w.count / maxWeek) * 100}%`, animationDelay: `${i * 40}ms` }}
                 title={`Week of ${w.weekStart}: ${w.count}`}
               />
             </div>

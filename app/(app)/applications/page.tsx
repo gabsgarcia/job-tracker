@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Flash } from "@/components/flash";
 import { StatusBadge } from "@/components/status-badge";
 import { ApplicationFields } from "@/components/application-fields";
+import { CsvImport } from "@/components/csv-import";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import type { Application } from "@/lib/types";
@@ -36,6 +37,8 @@ export default async function ApplicationsPage({
           </div>
         </form>
       </section>
+
+      <CsvImport />
 
       <section className="flex flex-col gap-2">
         <h2 className="font-semibold">Your applications ({applications.length})</h2>

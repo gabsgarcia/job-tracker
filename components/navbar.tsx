@@ -7,6 +7,7 @@ import { hasEnvVars } from "@/lib/utils";
 const links = [
   { href: "/applications", label: "Applications" },
   { href: "/tasks", label: "Tasks" },
+  { href: "/stats", label: "Stats" },
 ];
 
 export function Navbar() {

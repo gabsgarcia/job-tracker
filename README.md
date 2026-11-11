@@ -8,6 +8,7 @@ A small multi-user web app to keep track of job applications and the tasks for e
 - **Applications:** create, list, edit and delete. Fields: company, position, status, application date, notes.
 - **Statuses:** `applied`, `interviewing`, `offered`, `rejected`, `withdrawn`.
 - **Tasks:** add tasks to an application (title, optional due date), mark them as done, delete them. The **Tasks** page lists all your tasks.
+- **Stats:** total applications, active applications, interview rate, open/overdue tasks, a bar chart by status and applications per week (last 12 weeks). Friendly empty state for new users.
 - **CSV import:** import many applications at once from a CSV file (see `sample-applications.csv`).
 - **Privacy:** Row Level Security in the database. Each user can only read and change their own rows.
 
@@ -57,6 +58,7 @@ Nubank,Product Manager,applied,2026-08-18,
 ```
 app/(app)/applications   list, create, detail/edit, server actions, CSV import action
 app/(app)/tasks          all tasks of the logged-in user
+app/(app)/stats          KPIs and charts (lib/stats.ts does the math)
 app/auth                 auth pages from the Supabase starter
 components/              navbar, forms, task list, CSV import
 lib/types.ts             statuses and types (must match the database)

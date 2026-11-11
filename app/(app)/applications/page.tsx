@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Columns3, List } from "lucide-react";
+import { ApplicationsBoard } from "@/components/applications-board";
 import { Flash } from "@/components/flash";
 import { StatusBadge } from "@/components/status-badge";
 import { ApplicationFields } from "@/components/application-fields";
@@ -11,9 +13,9 @@ import { createApplication } from "./actions";
 export default async function ApplicationsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ message?: string; error?: string }>;
+  searchParams: Promise<{ message?: string; error?: string; view?: string }>;
 }) {
-  const { message, error } = await searchParams;
+  const { message, error, view = "list" } = await searchParams;
   const supabase = await createClient();
 
   // RLS guarantees this only returns the logged-in user's rows.
@@ -47,9 +49,28 @@ export default async function ApplicationsPage({
       />
 
       <section className="flex flex-col gap-2">
-        <h2 className="font-semibold">Your applications ({applications.length})</h2>
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="font-semibold">Your applications ({applications.length})</h2>
+          <nav aria-label="View" className="flex rounded-md border p-0.5 text-sm">
+            {(["list", "board"] as const).map((v) => (
+              <Link
+                key={v}
+                href={`/applications?view=${v}`}
+                aria-current={view === v ? "page" : undefined}
+                className={`flex items-center gap-1.5 rounded px-2.5 py-1 capitalize ${
+                  view === v ? "bg-accent font-medium" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {v === "list" ? <List className="size-4" /> : <Columns3 className="size-4" />}
+                {v}
+              </Link>
+            ))}
+          </nav>
+        </div>
         {applications.length === 0 ? (
           <p className="text-muted-foreground">No applications yet. Add your first one above.</p>
+        ) : view === "board" ? (
+          <ApplicationsBoard applications={applications} />
         ) : (
           <ul className="divide-y rounded-lg border">
             {applications.map((app) => (

@@ -66,6 +66,24 @@ export async function updateApplication(id: string, formData: FormData) {
   back(path, "message", "Application updated.");
 }
 
+// Called from the Kanban board on drop. Returns the error instead of
+// redirecting, so the board can roll back its optimistic move.
+export async function updateApplicationStatus(
+  id: string,
+  status: string,
+): Promise<{ error?: string }> {
+  const { supabase } = await requireUser();
+  if (!isStatus(status)) return { error: `Invalid status: ${status}` };
+
+  const { error } = await supabase.from("applications").update({ status }).eq("id", id);
+  if (error) return { error: `Could not update: ${error.message}` };
+
+  revalidatePath("/applications");
+  revalidatePath(`/applications/${id}`);
+  revalidatePath("/stats");
+  return {};
+}
+
 export async function deleteApplication(id: string) {
   const { supabase } = await requireUser();
   const { error } = await supabase.from("applications").delete().eq("id", id);

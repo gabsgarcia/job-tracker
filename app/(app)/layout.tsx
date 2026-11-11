@@ -1,8 +1,12 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Navbar } from "@/components/navbar";
 
 // Layout for every logged-in page: navbar on top, content in the middle.
 // The proxy (proxy.ts) already sends logged-out visitors to /auth/login.
+// Private pages: keep them out of search results.
+export const metadata: Metadata = { robots: { index: false, follow: false } };
+
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="min-h-screen flex flex-col items-center">

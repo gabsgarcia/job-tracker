@@ -13,8 +13,10 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
+     * - public metadata files read by Google and link previews (WhatsApp, Slack…):
+     *   robots.txt, sitemap.xml, opengraph-image, icon, apple-icon
      * Feel free to modify this pattern to include more paths.
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|opengraph-image|icon|apple-icon|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

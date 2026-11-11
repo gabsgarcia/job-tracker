@@ -1,17 +1,49 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { paletteScript } from "@/lib/palettes";
+import { siteDescription, siteName, siteTitle, siteUrl } from "@/lib/site";
 import "./globals.css";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
-
+// Title, description and preview card for Google and for shared links
+// (WhatsApp, Slack, LinkedIn, X). The preview image is app/opengraph-image.tsx.
 export const metadata: Metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Job Tracker",
-  description: "Track your job applications and tasks",
+  metadataBase: new URL(siteUrl),
+  title: { default: siteTitle, template: `%s · ${siteName}` },
+  description: siteDescription,
+  applicationName: siteName,
+  keywords: [
+    "job tracker",
+    "job application tracker",
+    "job search",
+    "kanban",
+    "career",
+    "interview",
+    "vagas",
+    "candidaturas",
+  ],
+  authors: [{ name: "Gabriella Garcia", url: "https://github.com/gabsgarcia" }],
+  creator: "Gabriella Garcia",
+  openGraph: {
+    type: "website",
+    siteName,
+    title: siteTitle,
+    description: siteDescription,
+    url: "/",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fbfbff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d0c17" },
+  ],
 };
 
 const geistSans = Geist({

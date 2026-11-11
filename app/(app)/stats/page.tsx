@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { computeStats, todayInSaoPaulo } from "@/lib/stats";
 import { enterClass, staggerStyle } from "@/lib/stagger";
 import type { Application, Task } from "@/lib/types";
+
+export const metadata: Metadata = { title: "Stats" };
 
 function Kpi({
   label,

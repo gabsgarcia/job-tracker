@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Columns3, List } from "lucide-react";
 import { ApplicationsBoard } from "@/components/applications-board";
@@ -9,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { enterClass, staggerStyle } from "@/lib/stagger";
 import { STATUSES, type Application } from "@/lib/types";
+
+export const metadata: Metadata = { title: "Applications" };
 
 export default async function ApplicationsPage({
   searchParams,

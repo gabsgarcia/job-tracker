@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { Flash } from "@/components/flash";
 import { TaskList } from "@/components/task-list";
 import { createClient } from "@/lib/supabase/server";
 import type { Task } from "@/lib/types";
+
+export const metadata: Metadata = { title: "Tasks" };
 
 export default async function TasksPage({
   searchParams,

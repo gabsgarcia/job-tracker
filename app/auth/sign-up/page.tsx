@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { SignUpForm } from "@/components/sign-up-form";
+
+export const metadata: Metadata = {
+  title: "Create your free account",
+  description: "Sign up for Job Tracker and organize your job search: AI quick add, Kanban board, tasks and stats. Free.",
+};
 
 export default function Page() {
   return (

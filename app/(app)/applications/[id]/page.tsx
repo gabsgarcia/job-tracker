@@ -51,6 +51,16 @@ export default async function ApplicationDetailPage({
           </h1>
           <StatusBadge status={app.status} />
         </div>
+        {app.job_url && (
+          <a
+            href={app.job_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-fit text-sm text-primary hover:underline"
+          >
+            View job posting ↗
+          </a>
+        )}
       </div>
       <Flash message={message} error={error} />
       <CelebrateOnLoad active={celebrate === "1"} />

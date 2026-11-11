@@ -4,7 +4,8 @@ import { STATUSES, type Application, type Status, type Task } from "@/lib/types"
 // That makes them easy to test and avoids time-zone surprises on Vercel (UTC).
 
 export type Stats = {
-  total: number;
+  total: number; // applications actually sent (everything except "saved")
+  saved: number; // jobs saved for later, not applied yet
   active: number; // applied + interviewing
   interviewRate: number | null; // (interviewing + offered) / total, null when total = 0
   offers: number;
@@ -35,8 +36,9 @@ export function computeStats(
   today: string,
   weeks = 12,
 ): Stats {
-  const total = apps.length;
   const count = (s: Status) => apps.filter((a) => a.status === s).length;
+  const saved = count("saved");
+  const total = apps.length - saved;
 
   const byStatus = STATUSES.map((status) => ({ status, count: count(status) }));
   const interviewing = count("interviewing");
@@ -52,6 +54,7 @@ export function computeStats(
   }
   const index = new Map(buckets.map((b, i) => [b.weekStart, i]));
   for (const a of apps) {
+    if (a.status === "saved") continue;
     const i = index.get(weekStart(a.application_date));
     if (i !== undefined) buckets[i].count++;
   }
@@ -59,6 +62,7 @@ export function computeStats(
   const open = tasks.filter((t) => !t.done);
   return {
     total,
+    saved,
     active: count("applied") + interviewing,
     interviewRate: total === 0 ? null : (interviewing + offers) / total,
     offers,

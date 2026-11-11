@@ -25,14 +25,24 @@ function readApplicationForm(formData: FormData) {
   const status = String(formData.get("status") ?? "applied");
   const application_date = String(formData.get("application_date") ?? "");
   const notesRaw = String(formData.get("notes") ?? "").trim();
+  const jobUrlRaw = String(formData.get("job_url") ?? "").trim();
 
   if (!company || !position) return { error: "Company and position are required." } as const;
   if (!isStatus(status)) return { error: `Invalid status: ${status}` } as const;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(application_date))
     return { error: "Please choose a valid application date." } as const;
+  if (jobUrlRaw && !/^https?:\/\//i.test(jobUrlRaw))
+    return { error: "The job link must start with http:// or https://" } as const;
 
   return {
-    values: { company, position, status, application_date, notes: notesRaw || null },
+    values: {
+      company,
+      position,
+      status,
+      application_date,
+      notes: notesRaw || null,
+      job_url: jobUrlRaw || null,
+    },
   } as const;
 }
 

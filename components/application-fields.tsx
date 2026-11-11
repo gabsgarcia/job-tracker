@@ -3,7 +3,8 @@ import { Label } from "@/components/ui/label";
 import { STATUSES, type Application } from "@/lib/types";
 
 // Shared fields for the "new application" and "edit application" forms.
-export function ApplicationFields({ app }: { app?: Application }) {
+// `app` can be a full application (edit) or a partial draft (Quick add).
+export function ApplicationFields({ app }: { app?: Partial<Application> }) {
   const today = new Date().toISOString().slice(0, 10);
   return (
     <div className="grid gap-4 sm:grid-cols-2">
@@ -38,6 +39,16 @@ export function ApplicationFields({ app }: { app?: Application }) {
           type="date"
           required
           defaultValue={app?.application_date ?? today}
+        />
+      </div>
+      <div className="grid gap-1 sm:col-span-2">
+        <Label htmlFor="job_url">Job link</Label>
+        <Input
+          id="job_url"
+          name="job_url"
+          type="url"
+          placeholder="https://…"
+          defaultValue={app?.job_url ?? ""}
         />
       </div>
       <div className="grid gap-1 sm:col-span-2">

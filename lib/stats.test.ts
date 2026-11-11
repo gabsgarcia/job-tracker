@@ -52,4 +52,22 @@ describe("computeStats", () => {
     expect(s.overdueTasks).toBe(1);
     expect(s.doneTasks).toBe(1);
   });
+
+  it("keeps saved jobs out of totals, rates and the weekly chart (not applied yet)", () => {
+    const s = computeStats(
+      [
+        { status: "saved", application_date: "2026-11-10" },
+        { status: "saved", application_date: "2026-11-10" },
+        { status: "applied", application_date: "2026-11-10" },
+        { status: "interviewing", application_date: "2026-11-10" },
+      ],
+      [],
+      "2026-11-11",
+    );
+    expect(s.saved).toBe(2);
+    expect(s.total).toBe(2);
+    expect(s.interviewRate).toBe(0.5);
+    expect(s.perWeek.at(-1)).toEqual({ weekStart: "2026-11-09", count: 2 });
+    expect(s.byStatus.find((b) => b.status === "saved")?.count).toBe(2);
+  });
 });

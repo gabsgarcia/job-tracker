@@ -1,6 +1,8 @@
 // Single source of truth for statuses in the code.
-// It MUST match the check constraint in supabase/migrations/001_initial_schema.sql.
+// It MUST match the check constraint in supabase/migrations/ (latest: 002_saved_status_and_job_url.sql).
+// "saved" = a job you found but have not applied to yet.
 export const STATUSES = [
+  "saved",
   "applied",
   "interviewing",
   "offered",
@@ -18,6 +20,7 @@ export type Application = {
   status: Status;
   application_date: string; // YYYY-MM-DD
   notes: string | null;
+  job_url: string | null;
   created_at: string;
 };
 

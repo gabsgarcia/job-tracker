@@ -1,6 +1,7 @@
 import type { Status } from "@/lib/types";
 
 const colors: Record<Status, string> = {
+  saved: "bg-violet-100 text-violet-800 dark:bg-violet-950 dark:text-violet-200",
   applied: "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200",
   interviewing: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200",
   offered: "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-200",

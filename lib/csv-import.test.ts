@@ -96,7 +96,7 @@ describe("validateRow", () => {
   });
 
   it("accepts every status of the app", () => {
-    for (const status of ["applied", "interviewing", "offered", "rejected", "withdrawn"]) {
+    for (const status of ["saved", "applied", "interviewing", "offered", "rejected", "withdrawn"]) {
       expect(validateRow({ ...goodRow, status })).toEqual([]);
     }
   });

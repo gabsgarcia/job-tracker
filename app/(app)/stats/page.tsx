@@ -64,7 +64,12 @@ export default async function StatsPage() {
       <h1 className="text-2xl font-bold">Stats</h1>
 
       <section className="grid gap-4 grid-cols-2 md:grid-cols-4">
-        <Kpi index={0} label="Total applications" value={String(s.total)} />
+        <Kpi
+          index={0}
+          label="Total applications"
+          value={String(s.total)}
+          hint={s.saved > 0 ? `+ ${s.saved} saved for later` : undefined}
+        />
         <Kpi index={1} label="Active" value={String(s.active)} hint="applied + interviewing" />
         <Kpi
           index={2}

@@ -3,13 +3,12 @@ import { Columns3, List } from "lucide-react";
 import { ApplicationsBoard } from "@/components/applications-board";
 import { Flash } from "@/components/flash";
 import { StatusBadge } from "@/components/status-badge";
-import { ApplicationFields } from "@/components/application-fields";
 import { CsvImport } from "@/components/csv-import";
+import { NewApplicationForm } from "@/components/new-application-form";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { enterClass, staggerStyle } from "@/lib/stagger";
 import { STATUSES, type Application } from "@/lib/types";
-import { createApplication } from "./actions";
 
 export default async function ApplicationsPage({
   searchParams,
@@ -34,12 +33,7 @@ export default async function ApplicationsPage({
       <div className="grid gap-4 lg:grid-cols-3">
         <section className="rounded-lg border p-4 flex flex-col gap-4 lg:col-span-2">
           <h2 className="font-semibold">New application</h2>
-          <form action={createApplication} className="flex flex-col gap-4">
-            <ApplicationFields />
-            <div>
-              <Button type="submit">Add application</Button>
-            </div>
-          </form>
+          <NewApplicationForm />
         </section>
 
         {/* Shortcut to the list below. First on mobile, side card on desktop. */}

@@ -76,7 +76,7 @@ export function ApplicationsBoard({ applications }: { applications: Application[
         onDragEnd={handleDragEnd}
         onDragCancel={() => setActiveId(null)}
       >
-        <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-5 lg:overflow-visible">
+        <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-6 lg:overflow-visible">
           {STATUSES.map((status) => (
             <Column
               key={status}
@@ -109,7 +109,7 @@ function Column({
     <section
       ref={setNodeRef}
       aria-label={`${status} column`}
-      className={`flex w-64 shrink-0 flex-col gap-2 rounded-lg border bg-muted/40 p-2 transition-colors lg:w-auto ${
+      className={`flex w-60 shrink-0 flex-col gap-2 rounded-lg border bg-muted/40 p-2 transition-colors lg:w-auto ${
         isOver ? "border-primary bg-accent" : ""
       }`}
     >
